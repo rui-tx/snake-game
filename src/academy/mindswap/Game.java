@@ -56,7 +56,7 @@ public class Game {
         if (pick == null) {
             return new Apple();
         }
-        
+
         switch (pick) {
             case BANANA:
                 return new Banana();
@@ -129,8 +129,8 @@ public class Game {
     }
 
     private boolean isSnakeOutOfBounds() {
-        return (snake.getHead().getCol() >= this.cols) || (snake.getHead().getCol() <= 0)
-                || (snake.getHead().getRow() >= this.rows) || (snake.getHead().getRow() <= 0);
+        return (snake.getHead().getCol() >= this.cols - 1) || (snake.getHead().getCol() <= 0)
+                || (snake.getHead().getRow() >= this.rows - 1) || (snake.getHead().getRow() <= 0);
     }
 
     private void endGame() {
