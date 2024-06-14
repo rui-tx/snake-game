@@ -52,12 +52,15 @@ public class Game {
     }
 
     private Fruit getNewFruit() {
-        int randomPick = (int) (Math.random() * (FruitEnum.values().length + 1));
-        //FruitEnum pick = FruitEnum.values()[randomPick];
-        switch (randomPick) {
-            case (1):
+        FruitEnum pick = FruitEnum.getRandomFruit();
+        if (pick == null) {
+            return new Apple();
+        }
+        
+        switch (pick) {
+            case BANANA:
                 return new Banana();
-            case (2):
+            case PEACH:
                 return new Peach();
             default:
                 return new Apple();
@@ -112,8 +115,7 @@ public class Game {
 
         // fruit check
         if (this.isSnakeCollidingWith(this.fruit.getPosition())) {
-            // TODO: add different types of fruits, sie apple 1 grow, orange 2 grow etc...
-            snake.increaseSize();
+            snake.increaseSize(this.fruit.getGrowValue());
             // increase game seed per fruit eaten
             if (this.delay > 10)
                 this.delay -= 5;
@@ -132,7 +134,7 @@ public class Game {
     }
 
     private void endGame() {
-        int totalScore = this.snake.getSnakeSize() * this.timeSurvived - this.delay;
+        int totalScore = this.snake.getSnakeSize() + this.timeSurvived - this.delay;
         System.out.println("Game ended!");
         System.out.println("Snake had size of " + this.snake.getSnakeSize() + " units");
         System.out.println("Game speed was " + this.delay + " ms per tick");
