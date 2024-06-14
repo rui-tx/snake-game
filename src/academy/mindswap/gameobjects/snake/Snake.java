@@ -27,18 +27,28 @@ public class Snake {
         }
     }
 
-    //TODO: refactor this, it doesn't feel quite quite right
+    // TODO: refactor: better but not 100%, some jank appears sometimes
     public boolean increaseSize(int size) {
-        Position newNode;
-        if (this.direction == Direction.LEFT) {
-            newNode = new Position(this.body.getLast().getCol() + 1, this.body.getLast().getRow());
-        } else {
-            newNode = new Position(this.body.getLast().getCol() - 1, this.body.getLast().getRow());
+        Position newTail = this.getPositionOfNewNodeToTail();
+        if (newTail == null) {
+            return false; //silently fail
         }
-
-        this.body.add(newNode);
-        
+        this.body.add(newTail);
         return size == 0 || this.increaseSize(size - 1);
+    }
+
+    private Position getPositionOfNewNodeToTail() {
+        switch (this.direction) {
+            case Direction.LEFT:
+                return new Position(this.body.getLast().getCol() + 1, this.body.getLast().getRow());
+            case Direction.RIGHT:
+                return new Position(this.body.getLast().getCol() - 1, this.body.getLast().getRow());
+            case Direction.UP:
+                return new Position(this.body.getLast().getCol(), this.body.getLast().getRow() + 1);
+            case Direction.DOWN:
+                return new Position(this.body.getLast().getCol() + 1, this.body.getLast().getRow() - 1);
+        }
+        return null;
     }
 
     public void move(Direction nextDirection) {
