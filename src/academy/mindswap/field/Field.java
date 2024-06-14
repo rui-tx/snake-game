@@ -14,11 +14,13 @@ public final class Field {
     private static final String SNAKE_BODY_STRING = "#";
     private static final String SNAKE_HEAD_STRING = "0";
     private static final String FRUIT_STRING = "@";
+    private static final String PAUSE_MESSAGE = "Press Enter to Resume. Esc to quit.";
 
     private static int width;
     private static int height;
     private static Screen screen;
     private static ScreenWriter screenWriter;
+
 
     private Field() {
     }
@@ -75,6 +77,17 @@ public final class Field {
             screenWriter.drawString(0, j, BORDER_STRING);
             screenWriter.drawString(width - 1, j, BORDER_STRING);
         }
+    }
+
+    public static void pause() {
+        int x = getWidth() / 2 - (PAUSE_MESSAGE.length() / 2) - 1;
+        screenWriter.drawString(x, getHeight() / 5, PAUSE_MESSAGE);
+    }
+
+    public static void clearPause() {
+        int x = getWidth() / 2 - (PAUSE_MESSAGE.length() / 2) - 1;
+        screenWriter.drawString(x, getHeight() / 5, PAUSE_MESSAGE);
+        screen.putString(x, getHeight() / 5, " ".repeat(PAUSE_MESSAGE.length()), null, null);
     }
 
     public static Key readInput() {
