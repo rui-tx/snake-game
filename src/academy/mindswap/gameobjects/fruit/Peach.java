@@ -8,6 +8,6 @@ public class Peach extends Fruit {
     public Peach() {
         this.setColor(Terminal.Color.RED);
         this.setString("Ô");
-        this.setGrowValue(Random.getRandomNumber(1, 10));
+        this.setGrowValue(Random.getRandomNumber(1, 3));
     }
 }
