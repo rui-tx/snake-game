@@ -28,7 +28,7 @@ public class Snake {
     }
 
     //TODO: refactor this, it doesn't feel quite quite right
-    public void increaseSize() {
+    public boolean increaseSize(int size) {
         Position newNode;
         if (this.direction == Direction.LEFT) {
             newNode = new Position(this.body.getLast().getCol() + 1, this.body.getLast().getRow());
@@ -37,6 +37,8 @@ public class Snake {
         }
 
         this.body.add(newNode);
+        
+        return size == 0 || this.increaseSize(size - 1);
     }
 
     public void move(Direction nextDirection) {

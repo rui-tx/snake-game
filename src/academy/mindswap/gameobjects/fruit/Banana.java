@@ -7,5 +7,6 @@ public class Banana extends Fruit {
     public Banana() {
         this.setColor(Terminal.Color.YELLOW);
         this.setString("(");
+        this.setGrowValue(3);
     }
 }
