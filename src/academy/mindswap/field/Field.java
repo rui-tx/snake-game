@@ -15,6 +15,7 @@ public final class Field {
     private static final String SNAKE_HEAD_STRING = "0";
     private static final String FRUIT_STRING = "@";
     private static final String PAUSE_MESSAGE = "Press Enter to Resume. Esc to quit.";
+    private static final String GAMEOVER_MESSAGE = "GameOver! Press Enter to restart. Esc to quit.";
 
     private static int width;
     private static int height;
@@ -82,6 +83,7 @@ public final class Field {
     public static void pause() {
         int x = getWidth() / 2 - (PAUSE_MESSAGE.length() / 2) - 1;
         screenWriter.drawString(x, getHeight() / 5, PAUSE_MESSAGE);
+        screen.refresh();
     }
 
     public static void clearPause() {
@@ -90,12 +92,38 @@ public final class Field {
         screen.putString(x, getHeight() / 5, " ".repeat(PAUSE_MESSAGE.length()), null, null);
     }
 
+    public static void gameOver() {
+        int x = getWidth() / 2 - (GAMEOVER_MESSAGE.length() / 2) - 1;
+        screenWriter.drawString(x, getHeight() / 5, GAMEOVER_MESSAGE);
+        screen.refresh();
+    }
+
+    public static void clearGameOver() {
+        int x = getWidth() / 2 - (GAMEOVER_MESSAGE.length() / 2) - 1;
+        screenWriter.drawString(x, getHeight() / 5, GAMEOVER_MESSAGE);
+        screen.putString(x, getHeight() / 5, " ".repeat(GAMEOVER_MESSAGE.length()), null, null);
+        screen.refresh();
+    }
+
     public static Key readInput() {
         return screen.readInput();
     }
 
     public static void drawFruit(Fruit fruit) {
         screen.putString(fruit.getPosition().getCol(), fruit.getPosition().getRow(), fruit.getString(), fruit.getColor(), null);
+    }
+
+    public static void clearScreen() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                screenWriter.drawString(0, j, BORDER_STRING);
+                screenWriter.drawString(i, j, " ");
+                screenWriter.drawString(width - 1, j, BORDER_STRING);
+            }
+
+            screenWriter.drawString(i, 0, BORDER_STRING);
+            screenWriter.drawString(i, height - 1, BORDER_STRING);
+        }
     }
 
     public static int getWidth() {
