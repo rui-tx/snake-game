@@ -27,16 +27,13 @@ public class Snake {
         }
     }
 
-    // TODO: refactor: better but not 100%, some jank appears sometimes
     public boolean increaseSize(int size) {
-        Position newTail = this.getPositionOfNewNodeToTail();
-        if (newTail == null) {
-            return false; //silently fail
-        }
+        Position newTail = new Position(this.body.getLast().getCol(), this.body.getLast().getRow());
         this.body.add(newTail);
         return size == 0 || this.increaseSize(size - 1);
     }
 
+    /*
     private Position getPositionOfNewNodeToTail() {
         switch (this.direction) {
             case Direction.LEFT:
@@ -46,10 +43,11 @@ public class Snake {
             case Direction.UP:
                 return new Position(this.body.getLast().getCol(), this.body.getLast().getRow() + 1);
             case Direction.DOWN:
-                return new Position(this.body.getLast().getCol() + 1, this.body.getLast().getRow() - 1);
+                return new Position(this.body.getLast().getCol(), this.body.getLast().getRow() - 1);
         }
         return null;
     }
+     */
 
     public void move(Direction nextDirection) {
         if (this.direction == Direction.LEFT && !(nextDirection == Direction.RIGHT)) {

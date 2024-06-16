@@ -55,7 +55,8 @@ public class Game {
                 this.setState(GAMEOVER);
             }
         }
-        this.endGame();
+
+        this.gameOverMenu();
     }
 
     private GameStateEnum getGameState() {
@@ -90,26 +91,6 @@ public class Game {
         }
     }
 
-    private void pauseMenu() {
-
-        Field.pause();
-
-        Key k = Field.readInput();
-
-        if (k != null) {
-            switch (k.getKind()) {
-                case Enter:
-                    this.state = RUNNING;
-                    System.out.println("Game resumed");
-                    Field.clearPause();
-                    break;
-
-                case Escape:
-                    System.exit(1);
-            }
-        }
-    }
-
     private void moveSnake() {
 
         Key k = Field.readInput();
@@ -133,7 +114,12 @@ public class Game {
                     break;
 
                 case Enter:
-                    this.state = PAUSE;
+                    if (this.state == PAUSE) {
+                        this.state = RUNNING;
+                    } else {
+                        this.state = PAUSE;
+                    }
+
                     System.out.println("Game paused");
                     this.pauseMenu();
                     break;
@@ -156,14 +142,14 @@ public class Game {
         it.next(); //skip head
         while (it.hasNext()) {
             Position currentBodyPosition = it.next();
-            if (this.isSnakeHeadCollidingWith(currentBodyPosition)) {
+            if (snake.getHead().equals(currentBodyPosition)) {
                 snake.die();
                 return;
             }
         }
 
         // fruit check
-        if (this.isSnakeHeadCollidingWith(this.fruit.getPosition())) {
+        if (snake.getHead().equals(this.fruit.getPosition())) {
             snake.increaseSize(this.fruit.getGrowValue());
             // increase game seed per fruit eaten
             if (this.delay > 10)
@@ -172,22 +158,70 @@ public class Game {
         }
     }
 
-    private boolean isSnakeHeadCollidingWith(Position currentPosition) {
-        return snake.getHead().getCol() == currentPosition.getCol()
-                && snake.getHead().getRow() == currentPosition.getRow();
-    }
-
     private boolean isSnakeOutOfBounds() {
         return (snake.getHead().getCol() >= this.cols - 1) || (snake.getHead().getCol() <= 0)
                 || (snake.getHead().getRow() >= this.rows - 1) || (snake.getHead().getRow() <= 0);
     }
 
-    private void endGame() {
+    private void pauseMenu() {
+
+        Field.pause();
+
+        Key k = Field.readInput();
+
+        if (k != null) {
+            switch (k.getKind()) {
+                case Enter:
+                    this.state = RUNNING;
+                    System.out.println("Game resumed");
+                    Field.clearPause();
+                    break;
+
+                case Escape:
+                    System.exit(1);
+            }
+        }
+    }
+
+    private void gameOverMenu() {
+
+        Field.gameOver();
+
         int totalScore = this.snake.getSnakeSize() + this.timeSurvived - this.delay;
         System.out.println("Game ended!");
         System.out.println("Snake had size of " + this.snake.getSnakeSize() + " units");
         System.out.println("Game speed was " + this.delay + " ms per tick");
         System.out.println("Player survived for " + this.timeSurvived + " units of time");
         System.out.println("Score: " + totalScore);
+
+        while (true) {
+            Key k = Field.readInput();
+            if (k != null) {
+                switch (k.getKind()) {
+                    case Enter:
+                        Field.clearGameOver();
+                        this.resetGame();
+                        break;
+
+                    case Escape:
+                        System.exit(1);
+                }
+            }
+        }
+    }
+
+    private void resetGame() {
+        Field.clearScreen();
+        snake = new Snake(cols / 2, rows / 2);
+        this.timeSurvived = 0;
+        this.delay = 100;
+        this.state = RUNNING;
+
+        try {
+            this.start();
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
     }
 }
