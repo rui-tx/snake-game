@@ -1,18 +1,21 @@
 package academy.mindswap.gameobjects.fruit;
 
+import academy.mindswap.field.Field;
 import academy.mindswap.field.Position;
 import academy.mindswap.util.Random;
 import com.googlecode.lanterna.terminal.Terminal;
 
 public abstract class Fruit {
-    
+
     private Position position;
     private Terminal.Color color;
     private String string;
     private int growValue;
 
     public Fruit() {
-        position = new Position(Random.getRandomNumber(5, 95), Random.getRandomNumber(5, 15));
+        position = new Position(
+                Random.getRandomNumber(Field.getWidthOffset() + 1, Field.getWidth() - Field.getWidthOffset() - 1),
+                Random.getRandomNumber(Field.getHeightOffset() + 1, Field.getHeight() - Field.getHeightOffset() - 1));
         this.growValue = 1;
     }
 
