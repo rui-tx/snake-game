@@ -30,6 +30,7 @@ public class Game {
         this.rows = rows;
 
         this.state = RUNNING;
+
     }
 
     public void start() throws InterruptedException {
@@ -76,6 +77,7 @@ public class Game {
     }
 
     private Fruit getNewFruit() {
+
         FruitEnum pick = FruitEnum.getRandomFruit();
         if (pick == null) {
             return new Apple();
@@ -124,6 +126,12 @@ public class Game {
                     this.pauseMenu();
                     break;
 
+                case Tab:
+                    Field.incWidthOffset();
+                    Field.incHeightOffset();
+                    Field.reDrawWall();
+                    break;
+
                 case Escape:
                     System.exit(1);
             }
@@ -151,16 +159,24 @@ public class Game {
         // fruit check
         if (snake.getHead().equals(this.fruit.getPosition())) {
             snake.increaseSize(this.fruit.getGrowValue());
-            // increase game seed per fruit eaten
-            if (this.delay > 10)
+            // increase game seed per fruit eaten and decrease game size
+            if (this.delay > 10) {
                 this.delay -= 5;
+                if (this.delay % 2 == 0) {
+                    Field.incWidthOffset();
+                    Field.incHeightOffset();
+                    Field.reDrawWall();
+                }
+            }
             this.fruit = null;
         }
     }
 
     private boolean isSnakeOutOfBounds() {
-        return (snake.getHead().getCol() >= this.cols - 1) || (snake.getHead().getCol() <= 0)
-                || (snake.getHead().getRow() >= this.rows - 1) || (snake.getHead().getRow() <= 0);
+        return (snake.getHead().getCol() >= (this.cols - Field.getWidthOffset()) - 1)
+                || (snake.getHead().getCol() <= Field.getWidthOffset())
+                || (snake.getHead().getRow() >= (this.rows - Field.getHeightOffset()) - 1)
+                || (snake.getHead().getRow() <= Field.getHeightOffset());
     }
 
     private void pauseMenu() {

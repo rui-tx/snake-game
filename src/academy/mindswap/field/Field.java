@@ -13,12 +13,14 @@ public final class Field {
     private static final String BORDER_STRING = "▒";
     private static final String SNAKE_BODY_STRING = "#";
     private static final String SNAKE_HEAD_STRING = "0";
-    private static final String FRUIT_STRING = "@";
+    //private static final String FRUIT_STRING = "@";
     private static final String PAUSE_MESSAGE = "Press Enter to Resume. Esc to quit.";
     private static final String GAMEOVER_MESSAGE = "GameOver! Press Enter to restart. Esc to quit.";
 
     private static int width;
     private static int height;
+    private static int widthOffset = 0;
+    private static int heightOffset = 0;
     private static Screen screen;
     private static ScreenWriter screenWriter;
 
@@ -70,15 +72,20 @@ public final class Field {
 
     private static void drawWalls() {
         for (int i = 0; i < width; i++) {
-            screenWriter.drawString(i, 0, BORDER_STRING);
-            screenWriter.drawString(i, height - 1, BORDER_STRING);
+            screenWriter.drawString(i, heightOffset, BORDER_STRING);
+            screenWriter.drawString(i, height - 1 - (heightOffset), BORDER_STRING);
         }
 
         for (int j = 0; j < height; j++) {
-            screenWriter.drawString(0, j, BORDER_STRING);
-            screenWriter.drawString(width - 1, j, BORDER_STRING);
+            screenWriter.drawString(widthOffset, j, BORDER_STRING);
+            screenWriter.drawString(width - 1 - (widthOffset), j, BORDER_STRING);
         }
     }
+
+    public static void reDrawWall() {
+        drawWalls();
+    }
+
 
     public static void pause() {
         int x = getWidth() / 2 - (PAUSE_MESSAGE.length() / 2) - 1;
@@ -124,6 +131,8 @@ public final class Field {
             screenWriter.drawString(i, 0, BORDER_STRING);
             screenWriter.drawString(i, height - 1, BORDER_STRING);
         }
+        widthOffset = 0;
+        heightOffset = 0;
     }
 
     public static int getWidth() {
@@ -132,5 +141,29 @@ public final class Field {
 
     public static int getHeight() {
         return height;
+    }
+
+    public static int getWidthOffset() {
+        return widthOffset;
+    }
+
+    public static int getHeightOffset() {
+        return heightOffset;
+    }
+
+    public static void incWidthOffset() {
+        Field.widthOffset = Field.widthOffset + 1;
+    }
+
+    public static void incHeightOffset() {
+        Field.heightOffset = Field.heightOffset + 1;
+    }
+
+    public static void decWidthOffset() {
+        Field.widthOffset = Field.widthOffset - 1;
+    }
+
+    public static void decHeightOffset() {
+        Field.heightOffset = Field.heightOffset - 1;
     }
 }
